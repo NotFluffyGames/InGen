@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netstandard2.0</TargetFramework>
+        <LangVersion>default</LangVersion>
+        <Nullable>enable</Nullable>
+        <EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Microsoft.CodeAnalysis" Version="3.8.0" />
+    </ItemGroup>
+    
+    <Import Project="../InGen.Core/InGen.Core.props" />
+    <Import Project="../InGen.Core.Generation/InGen.Core.Generation.props" />
+
+</Project>

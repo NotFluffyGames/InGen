@@ -1,0 +1,9 @@
+<Project>
+    <ItemGroup>
+        <Compile 
+                Include="$(MSBuildThisFileDirectory)/**/*.cs"
+                Exclude="$(MSBuildThisFileDirectory)/obj/**/*.cs;
+                $(MSBuildThisFileDirectory)/bin/**/*.cs;
+                $(MSBuildThisFileDirectory)/GlobalUsings.cs"/>
+    </ItemGroup>
+</Project>
