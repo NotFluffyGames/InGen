@@ -24,6 +24,7 @@
           <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       </ProjectReference>
       <ProjectReference Include="..\InGen.Container.Target\InGen.Container.Target.csproj" />
+      <ProjectReference Include="..\InGen.Core\InGen.Core.csproj" />
     </ItemGroup>
 
 </Project>

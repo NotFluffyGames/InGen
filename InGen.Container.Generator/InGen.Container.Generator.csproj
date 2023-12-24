@@ -11,7 +11,6 @@
       <PackageReference Include="Microsoft.CodeAnalysis" Version="3.8.0" />
     </ItemGroup>
     
-    <Import Project="../InGen.Core/InGen.Core.props" />
     <Import Project="../InGen.Core.Generation/InGen.Core.Generation.props" />
 
 </Project>

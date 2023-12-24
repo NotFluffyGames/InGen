@@ -8,6 +8,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\InGen.Container\InGen.Container.csproj" />
+      <ProjectReference Include="..\InGen.Core\InGen.Core.csproj" />
     </ItemGroup>
 
 </Project>
