@@ -2,7 +2,7 @@
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
-namespace InGen.Container.Target;
+namespace InGen.Target;
 
 public class ClassWithDependency
 {

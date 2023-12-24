@@ -2,7 +2,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 
-namespace InGen.Container.Injectors;
+namespace InGen.Injector;
 
 public class ArrayPool<T>
 {

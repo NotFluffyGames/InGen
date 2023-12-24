@@ -1,7 +1,7 @@
 using System.Linq;
 using System.Reflection;
 
-namespace InGen.Container.Caching
+namespace InGen.Caching
 {
     public sealed class TypeAttributeInfo
     {

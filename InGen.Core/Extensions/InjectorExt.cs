@@ -1,6 +1,6 @@
 ﻿using JetBrains.Annotations;
 
-namespace InGen.Container.Injectors
+namespace InGen.Injector
 {
     public static class InjectorExt
     {

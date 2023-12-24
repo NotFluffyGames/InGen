@@ -1,5 +1,5 @@
 // Global using directives
 
-global using InGen.Container;
-global using InGen.Container.Target;
+global using InGen;
+global using InGen.Target;
 global using NUnit.Framework;

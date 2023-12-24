@@ -2,9 +2,9 @@
 using System.Linq;
 using System.Reflection;
 
-namespace InGen.Container.Exceptions
+namespace InGen.Injector.Exceptions
 {
-    internal sealed class MethodInjectorException : Exception
+    public sealed class MethodInjectorException : Exception
     {
         public MethodInjectorException(object obj, MethodBase method, Exception e) : base(BuildMessage(obj, method, e))
         {

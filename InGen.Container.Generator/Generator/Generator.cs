@@ -1,6 +1,6 @@
 ﻿using Microsoft.CodeAnalysis.Text;
 
-namespace InGen.Container.Generator;
+namespace InGen.Generator;
 
 [Generator]
 public class Generator : ISourceGenerator

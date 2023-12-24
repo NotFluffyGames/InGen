@@ -1,4 +1,4 @@
-namespace InGen.Container.Target;
+namespace InGen.Target;
 
 [InGenContainer]
 [Single(typeof(SingleClass))]

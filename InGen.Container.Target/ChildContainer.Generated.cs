@@ -4,7 +4,7 @@ using System;
 using System.CodeDom.Compiler;
 using JetBrains.Annotations;
 
-namespace InGen.Container.Target;
+namespace InGen.Target;
 
 [GeneratedCode("InGen", "0.0.01")]
 public partial class ChildContainer : 

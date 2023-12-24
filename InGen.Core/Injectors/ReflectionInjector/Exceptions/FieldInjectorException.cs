@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace InGen.Container.Exceptions
+namespace InGen.Injector.Exceptions
 {
-    internal sealed class FieldInjectorException : Exception
+    public sealed class FieldInjectorException : Exception
     {
         public FieldInjectorException(Exception e) : base(e.Message)
         {

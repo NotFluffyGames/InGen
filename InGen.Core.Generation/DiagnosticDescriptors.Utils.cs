@@ -1,7 +1,7 @@
 using System;
 using Microsoft.CodeAnalysis.Diagnostics;
 
-namespace InGen.Container.Generator;
+namespace InGen.Generator;
 
 internal static partial class DiagnosticDescriptors
 {

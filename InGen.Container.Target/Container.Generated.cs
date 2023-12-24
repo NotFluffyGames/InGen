@@ -3,19 +3,19 @@
 using System;
 using System.CodeDom.Compiler;
 using System.Collections.Generic;
-using InGen.Container.Exceptions;
+using InGen.Exceptions;
 using JetBrains.Annotations;
 
-namespace InGen.Container.Target;
+namespace InGen.Target;
 
 [GeneratedCode("InGen", "0.0.01")]
 public partial class Container : 
     IContainer,
-    IResolver<InGen.Container.Target.FooStruct>,
-    IResolver<InGen.Container.Target.IFoo>,
-    IResolver<InGen.Container.Target.SingleClass>,
-    IResolver<InGen.Container.Target.ScopedClass>,
-    IResolver<InGen.Container.Target.TransientClass>,
+    IResolver<FooStruct>,
+    IResolver<IFoo>,
+    IResolver<SingleClass>,
+    IResolver<ScopedClass>,
+    IResolver<TransientClass>,
     IResolver<ClassWithDependency>
 {
     protected IContainer _rootScope;
@@ -112,9 +112,9 @@ public partial class Container :
     #region Resolvers
     
     //Structs are nullable
-    private InGen.Container.Target.FooStruct? __InGenContainerTargetFoo;
+    private FooStruct? __InGenContainerTargetFoo;
 
-    FooStruct IResolver<InGen.Container.Target.FooStruct>.Resolve(object id)
+    FooStruct IResolver<FooStruct>.Resolve(object id)
     {
         return id switch
         {
@@ -123,12 +123,12 @@ public partial class Container :
         };
     }
 
-    IFoo IResolver<InGen.Container.Target.IFoo>.Resolve(object id)
+    IFoo IResolver<IFoo>.Resolve(object id)
         => Resolve<FooStruct>(id);
 
-    private InGen.Container.Target.SingleClass __InGenContainerTargetSingleClass;
+    private SingleClass __InGenContainerTargetSingleClass;
 
-    SingleClass IResolver<InGen.Container.Target.SingleClass>.Resolve(object id)
+    SingleClass IResolver<SingleClass>.Resolve(object id)
     {
         return id switch
         {
@@ -175,11 +175,11 @@ public partial class Container :
     [GeneratedCode("InGen", "0.0.01")]
     public class Scope : 
         IContainer,
-        IResolver<InGen.Container.Target.FooStruct>,
-        IResolver<InGen.Container.Target.IFoo>,
-        IResolver<InGen.Container.Target.SingleClass>,
-        IResolver<InGen.Container.Target.ScopedClass>,
-        IResolver<InGen.Container.Target.TransientClass>,
+        IResolver<FooStruct>,
+        IResolver<IFoo>,
+        IResolver<SingleClass>,
+        IResolver<ScopedClass>,
+        IResolver<TransientClass>,
         IResolver<ClassWithDependency>
     {
         protected IContainer _root;
@@ -277,13 +277,13 @@ public partial class Container :
             
         #region Resolvers
         
-        FooStruct IResolver<InGen.Container.Target.FooStruct>.Resolve([CanBeNull] object id)
+        FooStruct IResolver<FooStruct>.Resolve([CanBeNull] object id)
             => _root.Resolve<FooStruct>();
 
-        IFoo IResolver<InGen.Container.Target.IFoo>.Resolve([CanBeNull] object id)
+        IFoo IResolver<IFoo>.Resolve([CanBeNull] object id)
             => _root.Resolve<IFoo>();
 
-        SingleClass IResolver<InGen.Container.Target.SingleClass>.Resolve([CanBeNull] object id)
+        SingleClass IResolver<SingleClass>.Resolve([CanBeNull] object id)
             => _root.Resolve<SingleClass>();
 
         private ScopedClass __InGenContainerTargetScopedClass;

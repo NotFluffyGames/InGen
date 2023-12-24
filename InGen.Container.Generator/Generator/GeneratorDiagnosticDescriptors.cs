@@ -1,6 +1,6 @@
-using static InGen.Container.Generator.DiagnosticDescriptors;
+using static InGen.Generator.DiagnosticDescriptors;
 
-namespace InGen.Container.Generator;
+namespace InGen.Generator;
 
 internal static class GeneratorDiagnosticDescriptors
 {

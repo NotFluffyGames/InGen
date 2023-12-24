@@ -1,4 +1,4 @@
-namespace InGen.Container.Injectors
+namespace InGen.Injector
 {
     public interface IInjectable
     {

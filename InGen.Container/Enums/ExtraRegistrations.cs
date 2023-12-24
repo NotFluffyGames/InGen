@@ -1,6 +1,6 @@
 using System;
 
-namespace InGen.Container;
+namespace InGen;
 
 [Flags]
 public enum ExtraRegistrations

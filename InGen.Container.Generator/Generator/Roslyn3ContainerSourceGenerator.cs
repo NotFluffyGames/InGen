@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using CodeGenCore.Extensions;
 
-namespace InGen.Container.Generator;
+namespace InGen.Generator;
 
 public class Roslyn3ContainerSourceGenerator
 {

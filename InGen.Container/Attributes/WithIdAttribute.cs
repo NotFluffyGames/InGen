@@ -1,7 +1,7 @@
 using System;
 using System.Diagnostics;
 
-namespace InGen.Container;
+namespace InGen;
 
 [Conditional("DEBUG")]
 [AttributeUsage(AttributeTargets.Parameter, AllowMultiple = true)]

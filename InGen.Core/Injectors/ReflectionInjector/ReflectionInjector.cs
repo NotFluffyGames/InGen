@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
-using InGen.Container.Caching;
-using InGen.Container.Exceptions;
+using InGen.Caching;
+using InGen.Injector.Exceptions;
 
-namespace InGen.Container.Injectors
+namespace InGen.Injector
 {
     public class ReflectionInjector : IInjector
     {

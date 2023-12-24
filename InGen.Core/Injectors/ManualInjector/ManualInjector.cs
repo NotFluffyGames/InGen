@@ -1,4 +1,4 @@
-namespace InGen.Container.Injectors
+namespace InGen.Injector
 {
     public class ManualInjector : IInjector
     {

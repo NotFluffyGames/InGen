@@ -1,7 +1,7 @@
 using System;
 using System.Reflection;
 
-namespace InGen.Container.Exceptions;
+namespace InGen.Exceptions;
 
 public class FailedToResolveException : Exception
 {

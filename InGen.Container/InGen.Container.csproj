@@ -15,4 +15,8 @@
       <ProjectReference Include="..\InGen.Core\InGen.Core.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Interfaces\" />
+    </ItemGroup>
+
 </Project>

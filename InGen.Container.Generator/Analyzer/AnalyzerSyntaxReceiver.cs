@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace InGen.Container.Generator;
+namespace InGen.Generator;
 
 public class AnalyzerSyntaxReceiver : ISyntaxReceiver
 {

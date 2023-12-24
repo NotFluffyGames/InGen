@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace InGen.Container.Generator;
+namespace InGen.Generator;
 
 public class Tracker<T>
 {

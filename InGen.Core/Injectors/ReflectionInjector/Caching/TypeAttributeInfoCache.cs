@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace InGen.Container.Caching
+namespace InGen.Caching
 {
     public static class ReflectionTypeInfoCache
     {

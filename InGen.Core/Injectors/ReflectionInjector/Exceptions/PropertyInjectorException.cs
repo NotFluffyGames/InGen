@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace InGen.Container.Exceptions
+namespace InGen.Injector.Exceptions
 {
-    internal sealed class PropertyInjectorException : Exception
+    public sealed class PropertyInjectorException : Exception
     {
         public PropertyInjectorException(Exception e) : base(e.Message)
         {

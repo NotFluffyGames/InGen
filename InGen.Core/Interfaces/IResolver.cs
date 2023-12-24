@@ -1,4 +1,4 @@
-namespace InGen.Container;
+namespace InGen;
 
 public interface IResolver<out T>
 {

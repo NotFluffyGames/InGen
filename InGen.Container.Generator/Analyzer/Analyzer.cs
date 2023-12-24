@@ -2,12 +2,16 @@ using System.Collections.Immutable;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Diagnostics;
 
-namespace InGen.Container.Generator;
+namespace InGen.Generator;
 
 [DiagnosticAnalyzer(LanguageNames.CSharp)]
 public class Analyzer : DiagnosticAnalyzer
 {
     public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get; }
+    
+    //Todo:
+    //- No duplicate registrations in attributes (even between inherited attributes)
+    //- No resolve unregistered type (or id) from type or interface implementing IContainer with attributes
     
     public override void Initialize(AnalysisContext context)
     {

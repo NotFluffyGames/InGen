@@ -1,4 +1,4 @@
-namespace InGen.Container;
+namespace InGen;
 
 public static class ContainerExt
 {

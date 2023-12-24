@@ -1,6 +1,6 @@
 using System;
 
-namespace InGen.Container;
+namespace InGen;
 
 public interface IContainer : IDisposable
 {

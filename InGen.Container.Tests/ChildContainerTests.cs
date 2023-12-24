@@ -1,4 +1,6 @@
-namespace InGen.Container.Tests;
+using InGen.Target;
+
+namespace InGen.Tests;
 
 [TestFixture]
 public class ChildContainerTests

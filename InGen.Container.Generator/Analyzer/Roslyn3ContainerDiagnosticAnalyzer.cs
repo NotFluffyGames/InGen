@@ -1,6 +1,6 @@
 using Microsoft.CodeAnalysis.Diagnostics;
 
-namespace InGen.Container.Generator;
+namespace InGen.Generator;
 
 public class Roslyn3ContainerDiagnosticAnalyzer
 {
