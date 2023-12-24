@@ -24,22 +24,45 @@ namespace InGen.Caching
         
         private static TypeAttributeInfo Generate(IReflect type)
         {
-            var fields = type
-                .GetFields(Flags)
-                .Where(f => f.IsDefined(typeof(InjectAttribute)))
-                .ToArray();
+            var injectFields = new List<FieldInfo>();
+            var optionalInjectFields = new List<FieldInfo>();
+                
+            foreach (var field in type.GetFields(Flags | BindingFlags.SetField))
+            {
+                if(field.IsDefined(typeof(InjectAttribute)))
+                    injectFields.Add(field);
+                else if(field.IsDefined(typeof(OptionalInjectAttribute))) 
+                    optionalInjectFields.Add(field);
+            }
             
-            var properties = type
-                .GetProperties(Flags)
-                .Where(p => p.CanWrite && p.IsDefined(typeof(InjectAttribute)))
-                .ToArray();
+            var injectProperties = new List<PropertyInfo>();
+            var optionalInjectProperties = new List<PropertyInfo>();
+                
+            foreach (var property in type.GetProperties(Flags | BindingFlags.SetProperty))
+            {
+                if(property.IsDefined(typeof(InjectAttribute)))
+                    injectProperties.Add(property);
+                else if(property.IsDefined(typeof(OptionalInjectAttribute))) 
+                    optionalInjectProperties.Add(property);
+            }
             
-            var methods = type
-                .GetMethods(Flags)
-                .Where(m => m.IsDefined(typeof(InjectAttribute)))
-                .ToArray();
+            var injectMethods = new List<MethodInfo>();
+            var optionalInjectMethods = new List<MethodInfo>();
+                
+            foreach (var method in type.GetMethods(Flags | BindingFlags.InvokeMethod))
+            {
+                if(method.IsDefined(typeof(InjectAttribute)))
+                    injectMethods.Add(method);
+                else if(method.IsDefined(typeof(OptionalInjectAttribute))) 
+                    optionalInjectMethods.Add(method);
+            }
 
-            return new(fields, properties, methods);
+            return new(injectFields, 
+                injectProperties, 
+                injectMethods, 
+                optionalInjectFields, 
+                optionalInjectProperties, 
+                optionalInjectMethods);
         }
     }
 }
