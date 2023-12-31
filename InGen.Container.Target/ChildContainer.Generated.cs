@@ -12,11 +12,6 @@ public partial class ChildContainer :
     IResolver<FooInChild>,
     IResolver<FooScopedInChild>
 {
-    public ChildContainer()
-    {
-        _rootScope = new Scope(this);
-    }
-    
     #region IContainer
 
     public override object Resolve(Type type, object id = null)
@@ -48,6 +43,8 @@ public partial class ChildContainer :
         return scope;
     }
 
+    protected override IContainer CreateRootScope() => new Scope(this);
+    
     public override void Dispose()
     {
         //Dispose all IDisposable fields
@@ -65,7 +62,7 @@ public partial class ChildContainer :
         => _fooInChild ??= new();
 
     FooScopedInChild IResolver<FooScopedInChild>.Resolve([CanBeNull] object id)
-        => _rootScope.Resolve<FooScopedInChild>();
+        => RootScope.Resolve<FooScopedInChild>();
     
     #endregion
     
@@ -74,10 +71,7 @@ public partial class ChildContainer :
         IResolver<FooInChild>,
         IResolver<FooScopedInChild>
     {
-        public Scope(IContainer root) : base(root)
-        {
-            
-        }
+        public Scope(IContainer root) : base(root) { }
         
         #region IContainer
 

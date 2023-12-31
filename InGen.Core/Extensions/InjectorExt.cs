@@ -10,11 +10,5 @@ namespace InGen.Injector
         {
             container.Resolve(id).Inject(toInject, container);
         }
-
-        [UsedImplicitly]
-        public static void Inject(this IInjector injector, object toInject, IContainer serviceProvider)
-        {
-            injector.Inject(toInject, serviceProvider);
-        }
     }
 }

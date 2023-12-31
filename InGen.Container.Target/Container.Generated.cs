@@ -4,6 +4,7 @@ using System;
 using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using InGen.Exceptions;
+using InGen.Injector;
 using JetBrains.Annotations;
 
 namespace InGen.Target;
@@ -18,14 +19,14 @@ public partial class Container :
     IResolver<TransientClass>,
     IResolver<ClassWithDependency>
 {
-    protected IContainer _rootScope;
-    protected readonly List<IContainer> _children = new List<IContainer>();
 
-    public Container()
-    {
-        _rootScope = new Scope(this);
-    }
+    protected readonly List<IContainer> _children = new List<IContainer>();
     
+    private IContainer _rootScope;
+    protected IContainer RootScope => _rootScope ??= CreateRootScope();
+    
+    protected virtual IContainer CreateRootScope() => new Scope(this);
+
     #region IContainer
 
     public T Resolve<T>([CanBeNull] object id = null)
@@ -138,7 +139,7 @@ public partial class Container :
     }
 
     ScopedClass IResolver<ScopedClass>.Resolve(object id)
-        => _rootScope.Resolve<ScopedClass>();
+        => RootScope.Resolve<ScopedClass>();
 
     TransientClass IResolver<TransientClass>.Resolve(object id)
     {

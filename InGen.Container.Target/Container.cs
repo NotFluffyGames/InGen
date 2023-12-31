@@ -10,10 +10,3 @@ namespace InGen.Target;
 public partial class Container
 {
 }
-
-[InGenContainer]
-[Single(typeof(FooInChild))]
-[Scoped(typeof(FooScopedInChild))]
-public partial class ChildContainer : Container
-{
-}
