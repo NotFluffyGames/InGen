@@ -6,11 +6,11 @@ namespace InGen.Target;
 
 public class ClassWithDependency
 {
-    private IDependentInterface _dependentInterface;
+    public IDependentInterface DependentInterface;
 
     public ClassWithDependency(
         IDependentInterface dependentInterface)
     {
-        _dependentInterface = dependentInterface;
+        DependentInterface = dependentInterface;
     }
 }

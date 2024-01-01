@@ -17,14 +17,14 @@ public partial class Container :
     IResolver<SingleClass>,
     IResolver<ScopedClass>,
     IResolver<TransientClass>,
-    IResolver<ClassWithDependency>
+    IResolver<ClassWithDependency>,
+    IResolver<WithIdOnlyClass>
 {
 
     protected readonly List<IContainer> _children = new List<IContainer>();
     
     private IContainer _rootScope;
     protected IContainer RootScope => _rootScope ??= CreateRootScope();
-    
     protected virtual IContainer CreateRootScope() => new Scope(this);
 
     #region IContainer
@@ -34,15 +34,20 @@ public partial class Container :
         if (this is IResolver<T> resolver)
             return resolver.Resolve(id);
 
-        throw new FailedToResolveException(this, typeof(T), id);
+        throw new InvalidTypeException(this, typeof(T), id);
     }
     
     public virtual IResult<T> TryResolve<T>([CanBeNull] object id = null)
     {
         if (this is IResolver<T> resolver)
-            return Result.FromValue(resolver.Resolve(id));
+        {
+            if (resolver.SupportsId(id))
+                return Result.FromValue(resolver.Resolve(id));
 
-        return Result.FromException<T>(new FailedToResolveException(this, typeof(T), id));
+            return Result.FromException<T>(new InvalidIdException(this, typeof(T), id));
+        }
+
+        return Result.FromException<T>(new InvalidTypeException(this, typeof(T), id));
     }
 
     public virtual object Resolve(Type type, [CanBeNull] object id = null)
@@ -63,10 +68,13 @@ public partial class Container :
         if(type == typeof(TransientClass))
             return Resolve<TransientClass>(id);
 
+        if (type == typeof(WithIdOnlyClass))
+            return Resolve<WithIdOnlyClass>(id);
+
         if (type == typeof(ClassWithDependency))
-            return Resolve<ClassWithDependency>();
+            return Resolve<ClassWithDependency>(id);
         
-        throw new FailedToResolveException(this, type, id);
+        throw new InvalidTypeException(this, type, id);
     }
     
     public virtual IResult<object> TryResolve(Type type, [CanBeNull] object id = null)
@@ -87,10 +95,13 @@ public partial class Container :
         if(type == typeof(TransientClass))
             return TryResolve<TransientClass>(id);
 
+        if (type == typeof(WithIdOnlyClass))
+            return TryResolve<WithIdOnlyClass>(id);
+
         if (type == typeof(ClassWithDependency))
-            return TryResolve<ClassWithDependency>();
+            return TryResolve<ClassWithDependency>(id);
         
-        return Result.FromException<object>(new FailedToResolveException(this, type, id));
+        return Result.FromException<object>(new InvalidTypeException(this, type, id));
     }
 
     public virtual IContainer CreateScope()
@@ -115,45 +126,76 @@ public partial class Container :
     //Structs are nullable
     private FooStruct? __InGenContainerTargetFoo;
 
+    bool IResolver<FooStruct>.SupportsId([CanBeNull] object id) 
+        => id is null;
+    
     FooStruct IResolver<FooStruct>.Resolve(object id)
     {
         return id switch
         {
             null => __InGenContainerTargetFoo ??= new FooStruct(),
-            _ => throw new FailedToResolveException(this, typeof(FooStruct), id)
+            _ => throw new InvalidIdException(this, typeof(FooStruct), id)
         };
     }
 
+    bool IResolver<IFoo>.SupportsId([CanBeNull] object id) 
+        => (this as IResolver<FooStruct>).SupportsId(id);
+    
     IFoo IResolver<IFoo>.Resolve(object id)
         => Resolve<FooStruct>(id);
 
     private SingleClass __InGenContainerTargetSingleClass;
+    private SingleClass __InGenContainerTargetSingleClassStringstring_id;
 
+    bool IResolver<SingleClass>.SupportsId([CanBeNull] object id)
+        => id is null or "string_id";
+    
     SingleClass IResolver<SingleClass>.Resolve(object id)
     {
         return id switch
         {
             null => __InGenContainerTargetSingleClass ??= new SingleClass(),
-            _ => throw new FailedToResolveException(this, typeof(SingleClass), id)
+            "string_id" => __InGenContainerTargetSingleClassStringstring_id ??= new SingleClass(),
+            _ => throw new InvalidIdException(this, typeof(SingleClass), id)
         };
     }
+    
+    bool IResolver<ScopedClass>.SupportsId([CanBeNull] object id)
+        => (RootScope as IResolver<ScopedClass>).SupportsId(id);
 
     ScopedClass IResolver<ScopedClass>.Resolve(object id)
-        => RootScope.Resolve<ScopedClass>();
+        => RootScope.Resolve<ScopedClass>(id);
 
+    bool IResolver<TransientClass>.SupportsId([CanBeNull] object id)
+        => id is null;
+    
     TransientClass IResolver<TransientClass>.Resolve(object id)
     {
         return id switch
         {
             null => new TransientClass(),
-            _ => throw new FailedToResolveException(this, typeof(TransientClass), id)
+            _ => throw new InvalidIdException(this, typeof(TransientClass), id)
+        };
+    }
+
+    private WithIdOnlyClass _inGenTargetWithIdOnlyClassInt5;
+    
+    bool IResolver<WithIdOnlyClass>.SupportsId([CanBeNull] object id)
+        => id is 5;
+    
+    WithIdOnlyClass IResolver<WithIdOnlyClass>.Resolve(object id)
+    {
+        return id switch
+        {
+            5 => _inGenTargetWithIdOnlyClassInt5 ??= new WithIdOnlyClass(),
+            _ => throw new InvalidIdException(this, typeof(WithIdOnlyClass), id)
         };
     }
 
     private ClassWithDependency __InGenContainerTargetClassWithDependency;
     
     private DependentClass __InGenContainerTargetDependentClass_For_InGenContainerTargetClassWithDependency;
-    private DependentClass Get_InGenContainerTargetDependentClass_For_InGenContainerTargetClassWithDependency()
+    private DependentClass __Get_InGenContainerTargetDependentClass_For_InGenContainerTargetClassWithDependency()
     {
         if (__InGenContainerTargetDependentClass_For_InGenContainerTargetClassWithDependency != null)
             return __InGenContainerTargetDependentClass_For_InGenContainerTargetClassWithDependency;
@@ -161,14 +203,27 @@ public partial class Container :
         return __InGenContainerTargetDependentClass_For_InGenContainerTargetClassWithDependency = new DependentClass();
     }
     
-    ClassWithDependency IResolver<ClassWithDependency>.Resolve(object id)
+    private ClassWithDependency __InGenContainerTargetClassWithDependencyStringstring_id;
+    private DependentClass __InGenContainerTargetDependentClass_For_InGenContainerTargetClassWithDependencyStringstring_id;
+    private DependentClass __Get_InGenContainerTargetDependentClass_For_InGenContainerTargetClassWithDependencyStringstring_id()
     {
-        if (__InGenContainerTargetClassWithDependency != null)
-            return __InGenContainerTargetClassWithDependency;
-        
-        //Parameter
-        var InGenContainerTargetDependentClassParam = Get_InGenContainerTargetDependentClass_For_InGenContainerTargetClassWithDependency();
-        return __InGenContainerTargetClassWithDependency = new ClassWithDependency(InGenContainerTargetDependentClassParam);
+        if (__InGenContainerTargetDependentClass_For_InGenContainerTargetClassWithDependencyStringstring_id != null)
+            return __InGenContainerTargetDependentClass_For_InGenContainerTargetClassWithDependencyStringstring_id;
+
+        return __InGenContainerTargetDependentClass_For_InGenContainerTargetClassWithDependencyStringstring_id = new DependentClass();
+    }
+
+    bool IResolver<ClassWithDependency>.SupportsId([CanBeNull] object id)
+        => id is null or "string_id";
+    
+    ClassWithDependency IResolver<ClassWithDependency>.Resolve([CanBeNull] object id)
+    {
+        return id switch
+        {
+            "string_id" => __InGenContainerTargetClassWithDependencyStringstring_id ??= new ClassWithDependency(__Get_InGenContainerTargetDependentClass_For_InGenContainerTargetClassWithDependencyStringstring_id()),
+            null => __InGenContainerTargetClassWithDependency ??= new ClassWithDependency(__Get_InGenContainerTargetDependentClass_For_InGenContainerTargetClassWithDependency()),
+            _ => throw new InvalidIdException(this, typeof(ClassWithDependency), id)
+        };
     }
 
     #endregion
@@ -181,32 +236,30 @@ public partial class Container :
         IResolver<SingleClass>,
         IResolver<ScopedClass>,
         IResolver<TransientClass>,
-        IResolver<ClassWithDependency>
+        IResolver<ClassWithDependency>,
+        IResolver<WithIdOnlyClass>
     {
-        protected IContainer _root;
+        private Container _root;
         protected readonly List<IContainer> _children = new List<IContainer>(); 
 
-        public Scope(IContainer root)
+        public Scope(Container root)
         {
             _root = root;
         }
         
         #region IContainer
-
-        public T Resolve<T>([CanBeNull] object id)
-        {
-            if (this is IResolver<T> resolver)
-                return resolver.Resolve(id);
-
-            throw new FailedToResolveException(this, typeof(T), id);
-        }
         
         public IResult<T> TryResolve<T>(object id)
         {
             if (this is IResolver<T> resolver)
-                return Result<T>.FromValue(resolver.Resolve(id));
+            {
+                if (resolver.SupportsId(id))
+                    return Result.FromValue(resolver.Resolve(id));
+
+                return Result.FromException<T>(new InvalidIdException(this, typeof(T), id));
+            }
             
-            return Result.FromException<T>(new FailedToResolveException(this, typeof(T), id));
+            return Result.FromException<T>(new InvalidTypeException(this, typeof(T), id));
         }
         
         public virtual object Resolve(Type type, [CanBeNull] object id = null)
@@ -229,8 +282,11 @@ public partial class Container :
 
             if (type == typeof(ClassWithDependency))
                 return Resolve<ClassWithDependency>(id);
+
+            if (type == typeof(WithIdOnlyClass))
+                return Resolve<WithIdOnlyClass>(id);
         
-            throw new FailedToResolveException(this, type, id);
+            throw new InvalidTypeException(this, type, id);
         }
 
         public virtual IResult<object> TryResolve(Type type, object id)
@@ -255,13 +311,16 @@ public partial class Container :
 
             if (type == typeof(ClassWithDependency))
                 return TryResolve<ClassWithDependency>(id);
+            
+            if (type == typeof(WithIdOnlyClass))
+                return TryResolve<WithIdOnlyClass>(id);
         
-            return Result.FromException<object>(new FailedToResolveException(this, type, id));
+            return Result.FromException<object>(new InvalidTypeException(this, type, id));
         }
         
         public virtual IContainer CreateScope()
         {
-            var scope = new Scope(this);
+            var scope = new Scope(_root);
             _children.Add(scope);
             return scope;
         }
@@ -277,28 +336,62 @@ public partial class Container :
         #endregion
             
         #region Resolvers
-        
+
+        bool IResolver<FooStruct>.SupportsId([CanBeNull] object id)
+            => (_root as IResolver<FooStruct>).SupportsId(id);
+
         FooStruct IResolver<FooStruct>.Resolve([CanBeNull] object id)
-            => _root.Resolve<FooStruct>();
+            => _root.Resolve<FooStruct>(id);
 
+        bool IResolver<IFoo>.SupportsId([CanBeNull] object id)
+            => (_root as IResolver<IFoo>).SupportsId(id);
         IFoo IResolver<IFoo>.Resolve([CanBeNull] object id)
-            => _root.Resolve<IFoo>();
+            => _root.Resolve<IFoo>(id);
 
+        bool IResolver<SingleClass>.SupportsId([CanBeNull] object id)
+            => (_root as IResolver<SingleClass>).SupportsId(id);
         SingleClass IResolver<SingleClass>.Resolve([CanBeNull] object id)
-            => _root.Resolve<SingleClass>();
+            => _root.Resolve<SingleClass>(id);
 
         private ScopedClass __InGenContainerTargetScopedClass;
             
+        bool IResolver<ScopedClass>.SupportsId([CanBeNull] object id) 
+            => id is null;
+
         ScopedClass IResolver<ScopedClass>.Resolve([CanBeNull] object id)
-            => __InGenContainerTargetScopedClass 
-                ??= new ScopedClass();
+        {
+            return id switch
+            {
+                null => __InGenContainerTargetScopedClass ??= new ScopedClass(),
+                _ => throw new InvalidIdException(this, typeof(ScopedClass), id)
+            };
+        }
+
+        bool IResolver<TransientClass>.SupportsId([CanBeNull] object id) 
+            => (_root as IResolver<TransientClass>).SupportsId(id);
 
         TransientClass IResolver<TransientClass>.Resolve([CanBeNull] object id)
-            => new TransientClass();
+            => _root.Resolve<TransientClass>(id);
 
+        bool IResolver<ClassWithDependency>.SupportsId([CanBeNull] object id) 
+            => (_root as IResolver<ClassWithDependency>).SupportsId(id);
+        
         ClassWithDependency IResolver<ClassWithDependency>.Resolve([CanBeNull] object id)
-            => _root.Resolve<ClassWithDependency>();
+            => _root.Resolve<ClassWithDependency>(id);
+        
+        bool IResolver<WithIdOnlyClass>.SupportsId([CanBeNull] object id) 
+            => (_root as IResolver<WithIdOnlyClass>).SupportsId(id);
+        WithIdOnlyClass IResolver<WithIdOnlyClass>.Resolve([CanBeNull] object id)
+            => _root.Resolve<WithIdOnlyClass>(id);
+        
+        public T Resolve<T>([CanBeNull] object id)
+        {
+            if (this is IResolver<T> resolver)
+                return resolver.Resolve(id);
 
-        #endregion}
+            throw new InvalidIdException(this, typeof(T), id);
+        }
+
+        #endregion
     }
 }

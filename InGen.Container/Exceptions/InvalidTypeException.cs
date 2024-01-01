@@ -3,16 +3,18 @@ using System.Reflection;
 
 namespace InGen.Exceptions;
 
-public class FailedToResolveException : Exception
+public class InvalidTypeException : Exception
 {
     public readonly IContainer Container;
     public readonly Type ResolveType;
+    public readonly object? Id;
 
-    public FailedToResolveException(IContainer container, Type resolveType, object? id = null)
+    public InvalidTypeException(IContainer container, Type resolveType, object? id = null)
         : base(GetMessage(container, resolveType, id))
     {
         Container = container;
         ResolveType = resolveType;
+        Id = id;
     }
 
     private static string GetMessage(IContainer container, MemberInfo resolveType, object? id)

@@ -13,6 +13,9 @@ public class RegisterAttribute : Attribute
 
     public ExtraRegistrations ExtraRegistrations { get; set; }
     public object? Id { get; set; }
+    /// <summary>
+    /// Supported sources include: Fields, Properties, Methods (with resolved parameters), Delegates and Lazy
+    /// </summary>
     public string? SourceMember { get; set; }
     
     //Todo: think

@@ -42,6 +42,17 @@ public readonly struct Result<T>
 
 public static class Result
 {
+    public static Result<T> Try<T>(Func<T> getResult)
+    {
+        try
+        {
+            return Result<T>.FromValue(getResult());
+        }
+        catch (Exception e)
+        {
+            return Result<T>.FromException(e);
+        }
+    }
     public static Result<T> FromValue<T>(T value) => Result<T>.FromValue(value);
     public static Result<T> FromException<T>(Exception exception) => Result<T>.FromException(exception);
 }

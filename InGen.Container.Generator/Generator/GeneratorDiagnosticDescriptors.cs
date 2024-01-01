@@ -2,6 +2,10 @@ using static InGen.Generator.DiagnosticDescriptors;
 
 namespace InGen.Generator;
 
+/// <summary>
+/// Todo:
+/// - Registration cannot have lifetime higher then it's parameter (A single registration cannot have a transient parameter)  
+/// </summary>
 internal static class GeneratorDiagnosticDescriptors
 {
     public static readonly DiagnosticDescriptor ServiceRequiredToConstructNotRegistered = Create(

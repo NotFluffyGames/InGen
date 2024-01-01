@@ -1,6 +1,6 @@
 namespace InGen.Target;
 
-public class FooScopedInChild
+public class ScopedInChild
 {
     
 }

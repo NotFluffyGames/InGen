@@ -1,6 +1,6 @@
 namespace InGen.Target;
 
-public class SingleInChild
+public class WithIdOnlyInChild
 {
     
 }
