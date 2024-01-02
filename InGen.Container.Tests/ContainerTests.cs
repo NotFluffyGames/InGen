@@ -14,6 +14,7 @@ public class ContainerTests
             yield return new Container();
             yield return new ChildContainer();
             yield return new ContainerWithParameters();
+            yield return new ContainerWithSources();
         }
     }
 
@@ -35,6 +36,11 @@ public class ContainerTests
             yield return container;
             yield return container.CreateScope();
             yield return new ContainerWithParameters().CreateScope();
+
+            container = new ContainerWithSources();
+            yield return container;
+            yield return container.CreateScope();
+            yield return new ContainerWithSources().CreateScope();
         }
     }
 
@@ -238,6 +244,25 @@ public class ContainerTests
             yield return (typeof(ClassWithDependency), "scoped-with-single-param", LifeTime.Scoped);
             yield return (typeof(ClassWithDependency), "transient-with-none-single-param", LifeTime.Transient);
             yield return (typeof(ClassWithDependency), "transient-with-single-param", LifeTime.Transient);
+        }
+        else if(containerType == typeof(ContainerWithSources) || containerType == typeof(ContainerWithSources.Scope))
+        {
+            yield return (typeof(IDependentInterface), null, LifeTime.Transient);
+            
+            yield return (typeof(Foo), "method", LifeTime.Transient);
+            yield return (typeof(Foo), "field", LifeTime.Single);
+            yield return (typeof(Foo), "property", LifeTime.Single);
+            yield return (typeof(Foo), "delegate", LifeTime.Transient);
+            yield return (typeof(Foo), "lazy", LifeTime.Single);
+            
+            yield return (typeof(IFoo), "method", LifeTime.Transient);
+            yield return (typeof(IFoo), "field", LifeTime.Single);
+            yield return (typeof(IFoo), "property", LifeTime.Single);
+            yield return (typeof(IFoo), "delegate", LifeTime.Transient);
+            yield return (typeof(IFoo), "lazy", LifeTime.Single);
+             
+            yield return (typeof(ClassWithDependency), "method", LifeTime.Transient);
+            yield return (typeof(ClassWithDependency), "delegate", LifeTime.Transient);
         }
     }
 
